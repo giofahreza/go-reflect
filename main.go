@@ -46,6 +46,16 @@ func ValidateStruct(s interface{}) error {
 	return nil
 }
 
+func calculateHandler() {
+	fmt.Println("Calculating endpoint...")
+}
+
+func calculateHandler2() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Calculating endpoint 2...")
+	}
+}
+
 func main() {
 	newLogin := Login{
 		Email:    "asd@mail.com",
@@ -100,6 +110,12 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello, Guys!")
 	})
+
+	http.HandleFunc("/calculate", func(w http.ResponseWriter, r *http.Request) {
+		calculateHandler()
+	})
+
+	http.HandleFunc("/calculate2", calculateHandler2())
 
 	fmt.Println("Server is running on port 8080")
 	http.ListenAndServe(":8080", nil)
